@@ -7,7 +7,7 @@
 #include <fstream>
 #include <string>
 #include "scanner.h"
-//#include "parser.h"
+#include "parser.h"
 //#include "visitor.h"
 
 using namespace std;
@@ -39,7 +39,7 @@ int main(int argc, const char* argv[]) {
     cout << "Scanner exitoso" << endl;
     cout << endl;
     cout << "Iniciando parsing:" << endl;
-    /*Parser parser(&scanner);
+    Parser parser(&scanner);
     try {
         Program* program = parser.parseProgram();
         cout << "Parsing exitoso" << endl << endl;
@@ -53,7 +53,7 @@ int main(int argc, const char* argv[]) {
     } catch (const exception& e) {
         cout << "Error durante la ejecución: " << e.what() << endl;
         return 1;
-    }*/
+    }
 
     return 0;
 }

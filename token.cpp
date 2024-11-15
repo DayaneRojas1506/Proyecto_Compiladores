@@ -61,6 +61,7 @@ std::ostream& operator << ( std::ostream& outs, const Token & tok )
         case Token::SALTO: outs<<"TOKEN(SALTO)"; break;
         case Token::PLUSPLUS: outs<<"TOKEN(PLUSPLUS)"; break;
         case Token::COMENTARIO: outs<<"TOKEN(COMENTARIO)"; break;
+        case Token::FORMAT: outs<<"TOKEN(FORMAT)"; break;
         //case Token::FUN : outs << "TOKEN(FUN)"; break;
         //case Token::ENDFUN : outs << "TOKEN(ENDFUN)"; break;
         default: outs << "TOKEN(UNKNOWN)"; break;

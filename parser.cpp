@@ -11,7 +11,7 @@
 #include "scanner.h"
 #include "exp.h"
 #include "parser.h"
-#include <iostream>
+
 #include <stdexcept>
 #include "token.h"
 #include "scanner.h"
@@ -63,7 +63,9 @@ Parser::Parser(Scanner* sc):scanner(sc) {
 
 LibraDec* Parser::parseLibraDec() {
     LibraDec* ld = NULL;
+    //cout<<previous->text<<endl;
     if(!match(Token::MICHI)){
+        cout<<previous->text<<endl;
         cout<<"Error: se esperaba # en la definicion de la libreria."<<endl;
         exit(1);
     }
@@ -304,14 +306,23 @@ Stm* Parser::parseStatement() {
             cout << "Error: se esperaba comilla después de '('." << endl;
             exit(1);
         }
-
-        if (!match(Token::PERCENT)) {
-            cout << "Error: se esperaba % después de 'comilla'." << endl;
+        if (!match(Token::FORMAT)) {
+            cout << "Error: se esperaba un especificador de formato." << endl;
             exit(1);
         }
 
-        
 
+        string format = previous->text;
+
+        if (!match(Token::COMILLA)) {
+            cout << "Error: se esperaba comilla después de FORMAT." << endl;
+            exit(1);
+        }
+
+        if(!match(Token::COMA)) {
+            cout << "Error: se esperaba una coma después de COMILLAS." << endl;
+            exit(1);
+        }
 
 
         e = parseCExp();
@@ -319,36 +330,62 @@ Stm* Parser::parseStatement() {
             cout << "Error: se esperaba un ')' después de la expresión." << endl;
             exit(1);
         }
-        s = new PrintStatement(e);
+        s = new PrintStatement(format, e);
     }
     else if (match(Token::IF)) {
+        if(!match(Token::PI)){
+            cout << "Error: se esperaba '(' después de la expresión." << endl;
+            exit(1);
+        }
         e = parseCExp();
-        if (!match(Token::THEN)) {
-            cout << "Error: se esperaba 'then' después de la expresión." << endl;
+        if (!match(Token::PD)) {
+            cout << "Error: se esperaba ')' después de la expresión." << endl;
+            exit(1);
+        }
+        if (!match(Token::LKEY)) {
+            cout << "Error: se esperaba '{' después de ')." << endl;
             exit(1);
         }
 
         tb = parseBody();
 
+        if (!match(Token::RKEY)) {
+            cout << "Error: se esperaba '}' después del cuerpo." << endl;
+            exit(1);
+        }
+
         if (match(Token::ELSE)) {
+            if (!match(Token::LKEY)) {
+                cout << "Error: se esperaba '{' después de la expresion." << endl;
+                exit(1);
+            }
             fb = parseBody();
         }
-        if (!match(Token::ENDIF)) {
-            cout << "Error: se esperaba 'end' al final de la declaración." << endl;
+        if (!match(Token::RKEY)) {
+            cout << "Error: se esperaba '}' al final de la declaración." << endl;
             exit(1);
         }
         s = new IfStatement(e, tb, fb);
 
     }
     else if (match(Token::WHILE)) {
+        if (!match(Token::PI)) {
+            cout << "Error: se esperaba '(' después de la expresión." << endl;
+            exit(1);
+        }
         e = parseCExp();
-        if (!match(Token::DO)) {
-            cout << "Error: se esperaba 'do' después de la expresión." << endl;
+
+        if (!match(Token::PD)) {
+            cout << "Error: se esperaba ')' después de la expresión." << endl;
+            exit(1);
+        }
+        if (!match(Token::LKEY)) {
+            cout << "Error: se esperaba '{' después de la expresión." << endl;
             exit(1);
         }
         tb = parseBody();
-        if (!match(Token::ENDWHILE)) {
-            cout << "Error: se esperaba 'endwhile' al final de la declaración." << endl;
+        if (!match(Token::RKEY)) {
+            cout << "Error: se esperaba '}' al final de la declaración." << endl;
             exit(1);
         }
         s = new WhileStatement(e, tb);
@@ -374,27 +411,25 @@ Stm* Parser::parseStatement() {
             cout << "Error: se esperaba ')' después de la expresión." << endl;
             exit(1);
         }
+        if (!match(Token::LKEY)) {
+            cout << "Error: se esperaba '{' después de la expresión." << endl;
+            exit(1);
+        }
+
         tb = parseBody();
-        if (!match(Token::ENDFOR)) {
-            cout << "Error: se esperaba 'endfor' al final de la declaración." << endl;
+        if (!match(Token::RKEY)) {
+            cout << "Error: se esperaba '}' al final de la declaración." << endl;
             exit(1);
         }
         s = new ForStatement(start, end, step, tb);
     }
     else if (match(Token::RETURN)){
-        if (!match(Token::PI)){
-            cout << "Error: se esperaba '(' después de 'return'." << endl;
+
+        e = e = parseCExp();
+        if (!match(Token::PC)){
+            cout << "Error: se esperaba ';' después de la expresión." << endl;
             exit(1);
-        }
-        if (match(Token::PD)){
-            e = nullptr;
-        }
-        else {
-            e = parseCExp();
-            if (!match(Token::PD)){
-                cout << "Error: se esperaba ')' después de la expresión." << endl;
-                exit(1);
-            }
+
         }
         s = new ReturnStatement(e);
     }

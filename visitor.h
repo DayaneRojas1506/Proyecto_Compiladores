@@ -7,10 +7,10 @@
 
 
 #include "exp.h"
-
 #include <list>
 
 class BinaryExp;
+class UnaryExp;
 class NumberExp;
 class BoolExp;
 class IFExp;
@@ -29,12 +29,16 @@ class FunDec;
 class FunDecList;
 class ReturnStatement;
 class FCallExp;
+class FCallStatement;
+class LibraDec;
+class LibraDecList;
 
 class Visitor {
 public:
     virtual int visit(IFExp* exp) = 0;
     virtual int visit(BinaryExp* exp) = 0;
     virtual int visit(NumberExp* exp) = 0;
+    virtual int visit(UnaryExp* exp) = 0;
     virtual int visit(BoolExp* exp) = 0;
     virtual int visit(IdentifierExp* exp) = 0;
     virtual int visit(FCallExp* exp) = 0;
@@ -50,7 +54,10 @@ public:
     virtual void visit(Program* p) = 0;
     virtual void visit(FunDec* f) = 0;
     virtual void visit(FunDecList* f) = 0;
+    virtual void visit(LibraDec* l) = 0;
+    virtual void visit(LibraDecList* l) =0;
     virtual void visit(ReturnStatement* r) = 0;
+    virtual void visit(FCallStatement* f) = 0;
 };
 
 class PrintVisitor : public Visitor {
@@ -58,6 +65,7 @@ public:
     void imprimir(Program* program);
     int visit(IFExp* exp) override;
     int visit(BinaryExp* exp) override;
+    int visit(UnaryExp* exp) override;
     int visit(NumberExp* exp) override;
     int visit(BoolExp* exp) override;
     int visit(IdentifierExp* exp) override;
@@ -70,10 +78,13 @@ public:
     void visit(VarDec* stm) override;
     void visit(VarDecList* stm) override;
     void visit(StatementList* stm) override;
+    void visit(FCallStatement* stm) override;
     void visit(Body* b) override;
     void visit(Program* p) override;
     void visit(FunDec* f) override;
     void visit(FunDecList* f) override;
+    void visit(LibraDec* l) override;
+    void visit(LibraDecList* l) override;
     void visit(ReturnStatement* r) override;
 
 private:
@@ -81,6 +92,8 @@ private:
     void increaseIndent() { indentLevel++; }
     void decreaseIndent() { indentLevel--; }
     void printIndent();
+
+
 };
 
 

@@ -73,19 +73,9 @@ Token* Scanner::nextToken() {
 
         }
     }
-    else if (c == '\\') {
-        current++;
-        if (current < input.length() && input[current] == 'n') {
-            token = new Token(Token::SALTO, "\\n", 0, 2);
-            current++;
-        }
-
-        else{
-            token = new Token(Token::ERR, c);
-        }
-    }
 
     else if (strchr("+-*/()=;,<#%{}.> \\\" ", c)) {
+        string format_char;
         switch(c) {
             case '+':
                 if (current + 1 < input.length() && input[current + 1] == '+') {
@@ -136,7 +126,22 @@ Token* Scanner::nextToken() {
             case ';': token = new Token(Token::PC, c); break;
             case '{': token= new Token(Token::RKEY,c); break;
             case '}': token = new Token(Token::LKEY,c); break;
-            case '%': token = new Token(Token::PERCENT, c); break;
+            case '%':
+                if (current + 1 < input.length() && (input[current+1] == 'd' || input[current+1] == 'f' || input[current+1] == 's')) {
+                    current++;
+                    cout<<"A"<<endl;
+                    format_char = input[current];  // Guardamos el especificador
+                }
+                cout<<input[current+1]<<endl;
+                if (current+1 < input.length() && input[current+1] == '\\' && input[current+2] == 'n') {
+                    //Falta tratar el error
+
+                    token = new Token(Token::FORMAT, "%" + format_char + "\n", 0, 3);
+                    current+=2;
+                } else {
+                    token = new Token(Token::PERCENT, c);
+                }
+                break;
             case '.': token= new Token(Token::POINT,c); break;
             case '>': token = new Token(Token::GREATER,c); break;
             case '#': token = new Token(Token::MICHI, c); break;

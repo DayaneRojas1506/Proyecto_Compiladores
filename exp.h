@@ -15,10 +15,11 @@ enum BinaryOp { PLUS_OP, MINUS_OP, MUL_OP, DIV_OP,LT_OP, LE_OP, EQ_OP };
 enum UnaryOp {PLUSPLUS_OP};
 
 class Body;
+class Visitor;
 
 class Exp {
 public:
-    virtual int  accept(Visitor* visitor) = 0;
+    virtual int accept(Visitor* visitor) = 0;
     virtual ~Exp() = 0;
     static string binopToChar(BinaryOp op);
     static string unaryopToChar(UnaryOp op);
@@ -28,15 +29,16 @@ public:
     Exp *left, *right;
     Exp* cond;
 
-    IFExp(Exp cond, Exp l, Exp* r);
-    int accept(Visitor* visitor);
+    IFExp(Exp* cond, Exp* l, Exp* r);
+    int accept(Visitor* visitor) override;
     ~IFExp();
 };
 
-class UnaryExp : public Exp{
+class UnaryExp : public Exp {
 public:
     Exp *unary;
     UnaryOp op;
+
     UnaryExp(Exp *u, UnaryOp op);
     int accept(Visitor* visitor);
     ~UnaryExp();
@@ -48,15 +50,17 @@ public:
     Exp *left, *right;
     BinaryOp op;
     BinaryExp(Exp* l, Exp* r, BinaryOp op);
-    int accept(Visitor* visitor);
+    int accept(Visitor* visitor) override;
     ~BinaryExp();
+
+
 };
 
 class NumberExp : public Exp {
 public:
     int value;
     NumberExp(int v);
-    int accept(Visitor* visitor);
+    int accept(Visitor* visitor) override;
     ~NumberExp();
 };
 
@@ -104,7 +108,8 @@ public:
 class PrintStatement : public Stm {
 public:
     Exp* e;
-    PrintStatement(Exp* e);
+    string format;
+    PrintStatement(string format,  Exp* e);
     int accept(Visitor* visitor);
     ~PrintStatement();
 };
@@ -202,7 +207,7 @@ public:
     string extension;
     LibraDec(string name, string extension): nameLibrary(name), extension(extension){}
     int accept(Visitor* visitor);
-    ~LibraDec();
+    ~LibraDec(){}
 };
 
 class LibraDecList{
@@ -219,10 +224,24 @@ public:
 class ReturnStatement : public Stm {
 public:
     Exp* returnExp;
-    ReturnStatement(Exp* returnExp);
+    ReturnStatement(Exp* returnExp): returnExp(returnExp){}
     int accept(Visitor* visitor);
-    ~ReturnStatement();
+    ~ReturnStatement(){ delete returnExp;}
 };
+
+class FCallStatement : public Stm {
+public:
+    FCallExp* funcCall;
+    // Constructor que recibe un FCallExp
+    FCallStatement(FCallExp* funcCall) : funcCall(funcCall) {}
+    int accept(Visitor* v);
+    //void accept(ImpValueVisitor* v);
+    ~FCallStatement() {
+        delete funcCall;
+    }
+
+};
+
 
 class Program {
 public:
