@@ -30,8 +30,7 @@ class FunDecList;
 class ReturnStatement;
 class FCallExp;
 class FCallStatement;
-class LibraDec;
-class LibraDecList;
+
 
 class Visitor {
 public:
@@ -54,8 +53,6 @@ public:
     virtual void visit(Program* p) = 0;
     virtual void visit(FunDec* f) = 0;
     virtual void visit(FunDecList* f) = 0;
-    virtual void visit(LibraDec* l) = 0;
-    virtual void visit(LibraDecList* l) =0;
     virtual void visit(ReturnStatement* r) = 0;
     virtual void visit(FCallStatement* f) = 0;
 };
@@ -83,8 +80,6 @@ public:
     void visit(Program* p) override;
     void visit(FunDec* f) override;
     void visit(FunDecList* f) override;
-    void visit(LibraDec* l) override;
-    void visit(LibraDecList* l) override;
     void visit(ReturnStatement* r) override;
 
 private:

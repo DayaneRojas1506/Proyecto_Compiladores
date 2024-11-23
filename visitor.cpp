@@ -90,10 +90,6 @@ int FunDecList::accept(Visitor* visitor) {
     return 0;
 }
 
-int LibraDec::accept(Visitor *visitor) {
-    visitor->visit(this);
-    return 0;
-}
 
 
 int ReturnStatement::accept(Visitor* visitor) {
@@ -110,10 +106,6 @@ int FCallStatement::accept(Visitor *visitor) {
     return 0;
 }
 
-int LibraDecList::accept(Visitor *visitor) {
-    visitor->visit(this);
-    return 0;
-}
 
 
 
@@ -129,8 +121,7 @@ int PrintVisitor::visit(BinaryExp* exp) {
     return 0;
 }
 int PrintVisitor::visit(UnaryExp* exp) {
-    exp->unary->accept(this);
-    cout << ' ' << Exp::unaryopToChar(exp->op) << ' ';
+    cout<<exp->unary<< Exp::unaryopToChar(exp->op) << ' ';
     return 0;
 }
 
@@ -159,7 +150,7 @@ void PrintVisitor::visit(AssignStatement* stm) {
 
 void PrintVisitor::visit(PrintStatement* stm) {
     cout << "print(";
-    cout << "\"" << stm->format << "\"";
+    cout << "\"" << stm->format << "n\",";
     stm->e->accept(this);
     cout << ");";
 }
@@ -179,11 +170,13 @@ void PrintVisitor::visit(IfStatement* stm) {
 }
 
 void PrintVisitor::imprimir(Program* program){
+    cout<<"#include<stdio.h>"<<endl;
+    cout<<endl;
     program->accept(this);
 }
 
 void PrintVisitor::visit(Program* program){
-    program->vardecs->accept(this);
+
     program->fundecs->accept(this);
 };
 
@@ -210,10 +203,14 @@ void PrintVisitor::visit(WhileStatement* stm){
 
 void PrintVisitor::visit(ForStatement* stm){
     cout << "for( ";
+    if(stm->type != ""){
+        cout<<stm->type<<" ";
+    }
+    cout<<stm->name<<" = ";
     stm->start->accept(this);
-    cout << ",";
+    cout << ";";
     stm->end->accept(this);
-    cout << ", ";
+    cout << "; ";
     stm->step->accept(this);
     cout << "){" << endl;
     stm->b->accept(this);
@@ -255,12 +252,12 @@ void PrintVisitor::visit(Body* stm){
 }
 
 void PrintVisitor::visit(FunDec* stm){
-    cout<< stm->type <<  " " << stm->name << "(";
+    cout<< stm->rtype <<  " " << stm->fname << "(";
     bool first = true;
-    list<string>::iterator typee, namee;
-    for (auto it = stm->params.begin(); it != stm->params.end(); ++it) {
+    list<string>::iterator type, name;
+    for (type = stm->types.begin(), name = stm->vars.begin(); type != stm->types.end(); type++, name++) {
         if (!first) cout << ", ";
-        cout << it->first << " " << it->second;  // it->first: tipo, it->second: nombre
+        cout << *type << " " << *name;
         first = false;
     }
     cout << "){" << endl;
@@ -311,16 +308,7 @@ void PrintVisitor::visit(FCallStatement* stm){
 }
 
 
-void PrintVisitor::visit(LibraDec* l){
-    cout<<"#inclue<"<<l->nameLibrary<<"."<<l->extension<<">";
-}
 
-void PrintVisitor::visit(LibraDecList* l){
-    for(auto lib : l->librarys){
-        lib->accept(this);
-    }
-
-}
 
 void PrintVisitor::printIndent() {
     for (int i = 0; i < indentLevel*2; i++) {

@@ -8,14 +8,16 @@
 using namespace std;
 IFExp::IFExp(Exp* cond,Exp* l, Exp* r): cond(cond),left(l),right(r){}
 BinaryExp::BinaryExp(Exp* l, Exp* r, BinaryOp op):left(l),right(r),op(op) {}
-UnaryExp::UnaryExp(Exp *u, UnaryOp op): unary(u), op(op) {}
+
+UnaryExp::UnaryExp(string u, UnaryOp op): unary(u), op(op) {}
+
 NumberExp::NumberExp(int v):value(v) {}
 BoolExp::BoolExp(bool v):value(v) {}
 IdentifierExp::IdentifierExp(const string& n):name(n) {}
 
 Exp::~Exp() {}
 BinaryExp::~BinaryExp() { delete left; delete right; }
-UnaryExp::~UnaryExp(){ delete unary;}
+UnaryExp::~UnaryExp(){}
 IFExp::~IFExp() {delete cond, delete left; delete right; }
 NumberExp::~NumberExp() { }
 BoolExp::~BoolExp() { }
@@ -41,7 +43,7 @@ WhileStatement::~WhileStatement() {
     delete condition;
     delete b;
 }
-ForStatement::ForStatement(Exp* s, Exp* e, Exp* st, Body* b): start(s), end(e), step(st), b(b) {}
+ForStatement::ForStatement(string type, string name, Exp* s, Exp* e, Exp* st, Body* b): type(type), name(name),  start(s), end(e), step(st), b(b) {}
 ForStatement::~ForStatement() {
     delete start;
     delete end;
@@ -73,10 +75,13 @@ StatementList::~StatementList() {
         delete s;
     }
 }
-FunDec::FunDec(string type, string name, list<pair<string,string>> params, Body* body):type(type), name(name), params(params), body(body){}
+
+FunDec::FunDec(string fname, list<string> types, list<string> vars, string rtype, Body* b): fname(fname), types(types), vars(vars), rtype(rtype), body(b) {}
 FunDec::~FunDec() {
     delete body;
 }
+
+
 
 Body::Body(VarDecList* v, StatementList* s): vardecs(v), slist(s) {}
 Body::~Body() {
@@ -102,23 +107,11 @@ FCallExp::~FCallExp(){
 }
 
 
-LibraDecList::LibraDecList(): librarys() {}
 
-void LibraDecList::add(LibraDec *libradec){
-    librarys.push_back(libradec);
-}
 
-LibraDecList::~LibraDecList() {
-    for(auto lib : librarys){
-        delete lib;
-    }
-}
-
-Program::Program(LibraDecList* libradecs , VarDecList* vardecs, FunDecList* fundecs): libradecs(libradecs), vardecs(vardecs), fundecs(fundecs) {}
+Program::Program( FunDecList* fundecs):fundecs(fundecs) {}
 
 Program::~Program() {
-    delete libradecs;
-    delete vardecs;
     delete fundecs;
 }
 Stm::~Stm() {}
@@ -132,6 +125,7 @@ string Exp::binopToChar(BinaryOp op) {
         case LT_OP: c = "<"; break;
         case LE_OP: c = "<="; break;
         case EQ_OP: c = "=="; break;
+        case GREATER_OP: c = ">"; break;
         default: c = "$";
     }
     return c;

@@ -39,6 +39,8 @@ int main(int argc, const char* argv[]) {
     cout << "Scanner exitoso" << endl;
     cout << endl;
     cout << "Iniciando parsing:" << endl;
+
+
     Parser parser(&scanner);
     try {
         Program* program = parser.parseProgram();

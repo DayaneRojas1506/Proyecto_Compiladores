@@ -11,7 +11,7 @@
 #include "visitor.h"
 
 using namespace std;
-enum BinaryOp { PLUS_OP, MINUS_OP, MUL_OP, DIV_OP,LT_OP, LE_OP, EQ_OP };
+enum BinaryOp { PLUS_OP, MINUS_OP, MUL_OP, DIV_OP,LT_OP, LE_OP, EQ_OP , GREATER_OP};
 enum UnaryOp {PLUSPLUS_OP};
 
 class Body;
@@ -36,10 +36,10 @@ public:
 
 class UnaryExp : public Exp {
 public:
-    Exp *unary;
+    string unary;
     UnaryOp op;
 
-    UnaryExp(Exp *u, UnaryOp op);
+    UnaryExp(string u, UnaryOp op);
     int accept(Visitor* visitor);
     ~UnaryExp();
 };
@@ -135,11 +135,14 @@ public:
 
 class ForStatement : public Stm {
 public:
+    // en caso que sea int x = 10 o x=10
+    string type{};
+    string name{};
     Exp* start;
     Exp* end;
     Exp* step;
     Body* b;
-    ForStatement(Exp* start, Exp* end, Exp* step, Body* b);
+    ForStatement(string type, string name, Exp* start, Exp* end, Exp* step, Body* b);
     int accept(Visitor* visitor);
     ~ForStatement();
 };
@@ -183,12 +186,17 @@ public:
 
 class FunDec {
 public:
-    string type;
-    string name;
-    list<pair<string,string>> params;
-    Body* body;
-    FunDec(string type, string name, list<pair<string,string>> params, Body* body);
-    int accept(Visitor* visitor);
+    string fname, rtype;
+    list<string> vars;
+    list<string> types;
+    Body *body;
+
+    FunDec(string fname, list<string> types, list<string> vars, string rtype, Body *body);
+
+    int accept(Visitor *v);
+
+    //void accept(ImpValueVisitor *v);
+
     ~FunDec();
 };
 
@@ -199,24 +207,6 @@ public:
     void add(FunDec* fundec);
     int accept(Visitor* visitor);
     ~FunDecList();
-};
-
-class LibraDec{
-public:
-    string nameLibrary;
-    string extension;
-    LibraDec(string name, string extension): nameLibrary(name), extension(extension){}
-    int accept(Visitor* visitor);
-    ~LibraDec(){}
-};
-
-class LibraDecList{
-public:
-    list<LibraDec*> librarys;
-    LibraDecList();
-    void add(LibraDec* libradec);
-    int accept(Visitor* visitor);
-    ~LibraDecList();
 };
 
 
@@ -245,10 +235,9 @@ public:
 
 class Program {
 public:
-    LibraDecList* libradecs;
-    VarDecList* vardecs;
+
     FunDecList* fundecs;
-    Program(LibraDecList* libradecs , VarDecList* vardecs, FunDecList* fundecs);
+    Program( FunDecList* fundecs);
     int accept(Visitor* visitor);
     ~Program();
 };

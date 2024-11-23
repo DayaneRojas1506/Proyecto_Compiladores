@@ -14,6 +14,7 @@ private:
     Scanner* scanner;
     Token *current, *previous;
     bool match(Token::Type ttype);
+    bool matchnotAdvance(Token::Type ttype);
     bool check(Token::Type ttype);
     bool advance();
     bool isAtEnd();
@@ -21,6 +22,7 @@ private:
     Exp* parseCExp();
     Exp* parseExpression();
     Exp* parseTerm();
+    Exp* parseUnaryFactor();
     Exp* parseFactor();
 public:
     Parser(Scanner* scanner);
@@ -33,8 +35,7 @@ public:
     FunDecList* parseFunDecList();
     FunDec* parseFunDec();
     //New
-    LibraDec* parseLibraDec();
-    LibraDecList* parseLibraDecList();
+
 
 };
 

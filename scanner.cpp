@@ -22,6 +22,8 @@ bool is_white_space(char c) {
 
 Token* Scanner::nextToken() {
     Token* token;
+    string word1;
+    string ch;
     while (current < input.length() &&  is_white_space(input[current]) ) current++;
     if (current >= input.length()) return new Token(Token::END);
     char c  = input[current];
@@ -52,6 +54,8 @@ Token* Scanner::nextToken() {
             token = new Token(Token::DO, word, 0, word.length());
         }else if (word == "for") {
             token = new Token(Token::FOR, word, 0, word.length());
+        }else if(word == "int" or word == "char" or word == "string" or word == "float" or word == "long"){
+            token = new Token(Token::TIPO, word, 0, word.length());
         }else if (word == "true") {
             token = new Token(Token::TRUE, word, 0, word.length());
         }
@@ -124,19 +128,24 @@ Token* Scanner::nextToken() {
                 }
                 break;
             case ';': token = new Token(Token::PC, c); break;
-            case '{': token= new Token(Token::RKEY,c); break;
-            case '}': token = new Token(Token::LKEY,c); break;
+            case '{': token= new Token(Token::LKEY,c); break;
+            case '}': token = new Token(Token::RKEY,c); break;
             case '%':
-                if (current + 1 < input.length() && (input[current+1] == 'd' || input[current+1] == 'f' || input[current+1] == 's')) {
+                if (current + 1 < input.length() && (input[current+1] == 'd' || input[current+1] == 'f' || input[current+1] == 'l')) {
                     current++;
-                    cout<<"A"<<endl;
-                    format_char = input[current];  // Guardamos el especificador
+                    format_char = input[current];
+                    if(input[current+1] == 'd'){
+                        current++;
+                        format_char += input[current];
+                    }
+                    //cout<<"A"<<endl;
+                    //format_char = input[current];  // Guardamos el especificador
                 }
-                cout<<input[current+1]<<endl;
+                //cout<<input[current+1]<<endl;
                 if (current+1 < input.length() && input[current+1] == '\\' && input[current+2] == 'n') {
                     //Falta tratar el error
 
-                    token = new Token(Token::FORMAT, "%" + format_char + "\n", 0, 3);
+                    token = new Token(Token::FORMAT, "%" + format_char + "\\"  , 0, format_char.length()+2 );
                     current+=2;
                 } else {
                     token = new Token(Token::PERCENT, c);
@@ -144,7 +153,35 @@ Token* Scanner::nextToken() {
                 break;
             case '.': token= new Token(Token::POINT,c); break;
             case '>': token = new Token(Token::GREATER,c); break;
-            case '#': token = new Token(Token::MICHI, c); break;
+            case '#':
+                //current++; // Saltamos el '#'
+                if (input.substr(current+1, 7) == "include"){
+                    current += 8; // Saltamos "include"
+                    if (current < input.length() && input[current] == '<') { // Verificamos '<'
+                        current++;
+                        std::string library;
+                        while (current < input.length() && isalpha(input[current])) { // Construimos el nombre de la librería
+                            library += input[current];
+                            current++;
+                        }
+                        if (library == "stdio" && current < input.length() && input[current] == '.') {
+                            current++; // Saltamos '.'
+                            if (current < input.length() && input[current] == 'h') { // Verificamos 'h'
+                                current++; // Saltamos 'h'
+                                if (current < input.length() && input[current] == '>') { // Verificamos '>'
+                                    current++; // Saltamos '>'
+
+                                    token = new Token(Token::LIBRARY, "#include<studio.h>", 0, 18  );
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                // Si no es un include válido, no se genera ningún token especial
+                token = new Token(Token::ERR, c);
+                break;
+
             case '"': token = new Token(Token::COMILLA,c); break;
             default:
                 cout << "No debería llegar acá" << endl;
