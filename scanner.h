@@ -9,6 +9,7 @@
 #include <string>
 #include "token.h"
 
+
 class Scanner {
 private:
     std::string input;

@@ -5,6 +5,7 @@ int main(){
     int y;
     long z;
 
+
     x = 1;
     y = 10;
     z = 1000000;

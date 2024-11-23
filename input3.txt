@@ -6,6 +6,7 @@ int main(){
     x = 1;
 
 
+
     for (i = 0; i < 10; i++){//declara i como variable local
         x = x + i;
     }

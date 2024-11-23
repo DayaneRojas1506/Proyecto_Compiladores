@@ -15,6 +15,7 @@ public:
         FOR, TRUE, FALSE, RETURN,  LKEY, RKEY, INCLUDE, MICHI, PERCENT, POINT, GREATER, COMILLA, SALTO, PLUSPLUS, COMENTARIO, FORMAT, LIBRARY, TIPO
     };
 
+
     Type type;
     std::string text;
 

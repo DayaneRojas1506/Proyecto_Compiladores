@@ -189,6 +189,8 @@ Token* Scanner::nextToken() {
         }
         current++;
     }
+
+
     else {
         token = new Token(Token::ERR, c);
         current++;

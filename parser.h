@@ -14,6 +14,7 @@ private:
     Scanner* scanner;
     Token *current, *previous;
     bool match(Token::Type ttype);
+
     bool matchnotAdvance(Token::Type ttype);
     bool check(Token::Type ttype);
     bool advance();

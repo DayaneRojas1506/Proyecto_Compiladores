@@ -177,6 +177,8 @@ FunDec* Parser::parseFunDec() {
             if (!match(Token::ID)) {
                 cout << "Error: se esperaba un identificador después del tipo." << endl;
                 exit(1);
+
+
             }
             vars.push_back(previous->text);
             while(match(Token::COMA)) {

@@ -31,6 +31,7 @@ int main(int argc, const char* argv[]) {
     }
     infile.close();
 
+
     Scanner scanner(input.c_str());
 
     string input_copy = input;

@@ -67,6 +67,7 @@ std::ostream& operator << ( std::ostream& outs, const Token & tok )
         //case Token::ENDFUN : outs << "TOKEN(ENDFUN)"; break;
         default: outs << "TOKEN(UNKNOWN)"; break;
 
+
     }
     return outs;
 }
