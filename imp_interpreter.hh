@@ -31,6 +31,7 @@ public:
   ImpValue visit(NumberExp* e);
   ImpValue visit(IdentifierExp* e);
   ImpValue visit(IFExp* e);
+  ImpValue visit(FCallExp* e);
 };
 
 

@@ -55,12 +55,12 @@ int main(int argc, const char* argv[]) {
         cout << "Parsing exitoso" << endl << endl;
         cout << "Iniciando Visitor:" << endl;
         PrintVisitor printVisitor;
-        ConcreteImpCODE interpreter;
+        ImpCODE interpret;
         cout << endl;
         cout << "IMPRIMIR:" << endl;
         printVisitor.imprimir(program);
         cout << endl << "Run program:" << endl;
-        interpreter.interpret(program);
+        interpret.interpret(program);
         cout  << endl;
         delete program;
     } catch (const exception& e) {

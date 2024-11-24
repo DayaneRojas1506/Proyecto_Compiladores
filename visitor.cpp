@@ -85,6 +85,8 @@ int FunDec::accept(Visitor* visitor) {
     return 0;
 }
 
+
+
 int FunDecList::accept(Visitor* visitor) {
     visitor->visit(this);
     return 0;
@@ -97,6 +99,8 @@ int ReturnStatement::accept(Visitor* visitor) {
     return 0;
 }
 
+
+
 int FCallExp::accept(Visitor* visitor) {
     return visitor->visit(this);
 }
@@ -106,10 +110,6 @@ int FCallStatement::accept(Visitor *visitor) {
     visitor->visit(this);
    return 0;
 }
-
-
-
-
 
 
 

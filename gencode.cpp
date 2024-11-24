@@ -64,7 +64,23 @@ void VarDecList::accept(ImpValueVisitor* v) {
 void Body::accept(ImpValueVisitor* v) {
     return v->visit(this);
 }
+void FunDec::accept(ImpValueVisitor *v)
+{   return v->visit(this);
+}
 
+void FunDecList::accept(ImpValueVisitor *v)
+{
+   return v->visit(this);
+}
+
+void ReturnStatement::accept(ImpValueVisitor *v)
+{   return v->visit(this);
+
+}
+
+void FCallStatement::accept(ImpValueVisitor *v)
+{  return v->visit(this);
+}
 void Program::accept(ImpValueVisitor* v) {
     return v->visit(this);
 }
@@ -313,3 +329,27 @@ ImpValue ImpCODE::visit(IFExp* e) {
 
 }
 
+// Implementación de las funciones que faltan
+void ImpCODE::visit(FunDec* e) {
+   if (env.check(e->name))
+        cout << "LODc " << e->name <<endl;
+    return env.lookup(e->name);n
+}
+
+void ImpCODE::visit(ReturnStatement* e) {
+    if (env.check(e->name))
+        cout << "LODc " << e->name <<endl;
+    return env.lookup(e->name);
+}
+
+void ImpCODE::visit(FCallStatement* e) {
+    if (env.check(e->name))
+        cout << "LODc " << e->name <<endl;
+    return env.lookup(e->name); // Llamar a la función
+}
+
+ImpValue ImpCODE::visit(FCallExp* e) {
+   if (env.check(e->name))
+        cout << "LODc " << e->name <<endl;
+    return env.lookup(e->name);
+}
