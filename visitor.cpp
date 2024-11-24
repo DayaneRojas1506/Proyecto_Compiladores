@@ -5,9 +5,9 @@
 #include <iostream>
 #include "visitor.h"
 #include "exp.h"
+#include <unordered_map>
 
-
-
+using namespace std;
 
 int BinaryExp::accept(Visitor* visitor) {
     return visitor->visit(this);
@@ -102,8 +102,9 @@ int FCallExp::accept(Visitor* visitor) {
 }
 
 int FCallStatement::accept(Visitor *visitor) {
+   //return 
     visitor->visit(this);
-    return 0;
+   return 0;
 }
 
 
@@ -179,6 +180,7 @@ void PrintVisitor::imprimir(Program* program){
 void PrintVisitor::visit(Program* program){
 
     program->fundecs->accept(this);
+   //program  -> vardecs ->accept (this);
 };
 
 

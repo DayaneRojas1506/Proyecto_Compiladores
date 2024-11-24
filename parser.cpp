@@ -1,9 +1,3 @@
-//
-// Created by Jazmin on 6/11/2024.
-//
-
-#include "parser.h"
-
 
 #include <iostream>
 #include <stdexcept>
@@ -11,12 +5,7 @@
 #include "scanner.h"
 #include "exp.h"
 #include "parser.h"
-
 #include <stdexcept>
-#include "token.h"
-#include "scanner.h"
-#include "exp.h"
-#include "parser.h"
 
 using namespace std;
 
@@ -212,7 +201,7 @@ FunDec* Parser::parseFunDec() {
         if (!match(Token::RKEY)){
             //cout<<previous->text<<endl;
             //cout<<current->text<<endl;
-            cout << "Error: se esperaba 'endfun' al final de la declaración." << endl;
+            cout << "Error: se esperaba 'rkey' al final de la declaración." << endl;
             exit(1);
         }
         fd = new FunDec(fname, types, vars, rtype, body);

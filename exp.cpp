@@ -113,7 +113,7 @@ FCallExp::~FCallExp(){
 Program::Program( FunDecList* fundecs):fundecs(fundecs) {}
 
 Program::~Program() {
-    delete fundecs;
+    delete body;
 }
 Stm::~Stm() {}
 string Exp::binopToChar(BinaryOp op) {

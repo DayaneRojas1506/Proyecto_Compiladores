@@ -9,6 +9,13 @@
 #include "scanner.h"
 #include "parser.h"
 //#include "visitor.h"
+#include "visitor.h"
+#include "imp_interpreter.hh"
+#include "gencode.hh"
+#include "imp_type.hh"
+#include "gencode.cpp"
+
+
 
 using namespace std;
 
@@ -48,9 +55,12 @@ int main(int argc, const char* argv[]) {
         cout << "Parsing exitoso" << endl << endl;
         cout << "Iniciando Visitor:" << endl;
         PrintVisitor printVisitor;
+        ConcreteImpCODE interpreter;
         cout << endl;
         cout << "IMPRIMIR:" << endl;
         printVisitor.imprimir(program);
+        cout << endl << "Run program:" << endl;
+        interpreter.interpret(program);
         cout  << endl;
         delete program;
     } catch (const exception& e) {
@@ -60,3 +70,5 @@ int main(int argc, const char* argv[]) {
 
     return 0;
 }
+
+
