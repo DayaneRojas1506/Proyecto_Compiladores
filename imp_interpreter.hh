@@ -25,7 +25,7 @@ public:
   void visit(IfStatement*);
   void visit(WhileStatement*);
   void visit(ForStatement* e);
-  
+  ImpValue visit(UnaryExp* e);
   ImpValue visit(BinaryExp* e);
   ImpValue visit(BoolExp* e);
   ImpValue visit(NumberExp* e);

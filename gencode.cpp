@@ -1,5 +1,7 @@
 #include "gencode.hh"
-
+/*ImpValue UnaryExp::accept(ImpValueVisitor* v) {
+    return v->visit(this);
+}*/
 
 ImpValue BinaryExp::accept(ImpValueVisitor* v) {
     return v->visit(this);
@@ -23,68 +25,20 @@ ImpValue IFExp::accept(ImpValueVisitor* v) {
 }
 
 
-
-void AssignStatement::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-void PrintStatement::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-void IfStatement::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-void WhileStatement::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-
-void ForStatement::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-
-void StatementList::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-void VarDec::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-
-void VarDecList::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
-
-
-void Body::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-void FunDec::accept(ImpValueVisitor *v)
-{   return v->visit(this);
-}
-
-void FunDecList::accept(ImpValueVisitor *v)
-{
-   return v->visit(this);
-}
-
-void ReturnStatement::accept(ImpValueVisitor *v)
-{   return v->visit(this);
-
-}
-
-void FCallStatement::accept(ImpValueVisitor *v)
-{  return v->visit(this);
-}
-void Program::accept(ImpValueVisitor* v) {
-    return v->visit(this);
-}
-
+void AssignStatement::accept(ImpValueVisitor* v) { v->visit(this); }
+void PrintStatement::accept(ImpValueVisitor* v) { v->visit(this); }
+void IfStatement::accept(ImpValueVisitor* v) { v->visit(this); }
+void WhileStatement::accept(ImpValueVisitor* v) { v->visit(this); }
+void ForStatement::accept(ImpValueVisitor* v) { v->visit(this); }
+void StatementList::accept(ImpValueVisitor* v) { v->visit(this); }
+void VarDec::accept(ImpValueVisitor* v) { v->visit(this); }
+void VarDecList::accept(ImpValueVisitor* v) { v->visit(this); }
+void Body::accept(ImpValueVisitor* v) { v->visit(this); }
+void FunDec::accept(ImpValueVisitor* v) { v->visit(this); }
+void FunDecList::accept(ImpValueVisitor* v) { v->visit(this); }
+void ReturnStatement::accept(ImpValueVisitor* v) { v->visit(this); }
+void FCallStatement::accept(ImpValueVisitor* v) { v->visit(this); }
+void Program::accept(ImpValueVisitor* v) { v->visit(this); }
 void ImpCODE::interpret(Program* p) {
     etiquetas = 0;  // Inicializamos el contador de etiquetas
     env.clear();
@@ -331,25 +285,61 @@ ImpValue ImpCODE::visit(IFExp* e) {
 
 // Implementación de las funciones que faltan
 void ImpCODE::visit(FunDec* e) {
-   if (env.check(e->name))
-        cout << "LODc " << e->name <<endl;
-    return env.lookup(e->name);n
+    // Procesamos la declaración de la función
+    // Por ejemplo, podemos generar código para la cabecera de la función.
+    cout << "Generando código para la función: " << e->fname << endl;
+    
+    // Procesamos las variables locales de la función
+    for (auto& var : e->vars) {
+        cout << "Variable local: " << var << endl;
+    }
+    
+    // Procesamos el tipo de retorno de la función
+    cout << "Tipo de retorno: " << e->rtype << endl;
+
+    // Si la función tiene un cuerpo, visitamos ese cuerpo
+    if (e->body) {
+        e->body->accept(this);  // Visitamos el cuerpo de la función.
+    }
+}
+
+void ImpCODE::visit(FunDecList* e) {
+    // Recorremos la lista de funciones
+    for (auto& fundec : e->fundecs) {
+        fundec->accept(this);  // Visitamos cada declaración de función.
+    }
 }
 
 void ImpCODE::visit(ReturnStatement* e) {
-    if (env.check(e->name))
-        cout << "LODc " << e->name <<endl;
-    return env.lookup(e->name);
+     cout << "return ";
+    e->returnExp->accept(this);  // Llamar al visitante de la expresión de retorno
+    cout << ";\n";  // Terminar la instrucción con un punto y coma
 }
 
+/*ImpValue ImpCODE::visit(UnaryExp *e)
+{
+    return ImpValue();
+}
+*/
 void ImpCODE::visit(FCallStatement* e) {
-    if (env.check(e->name))
-        cout << "LODc " << e->name <<endl;
-    return env.lookup(e->name); // Llamar a la función
+    // Llamar al visitante de la expresión de llamada a función
+    e->funcCall->accept(this);
+    cout << ";\n"; // Finalizar la declaración de la llamada con un punto y coma
+}
+ImpValue ImpCODE::visit(FCallExp* e) {
+    // Generar código para la llamada a la función
+    cout << e->name << "(";
+    
+    for (auto it = e->args.begin(); it != e->args.end(); ++it) {
+        (*it)->accept(this);  // Llamar a visit para cada argumento
+        if (next(it) != e->args.end()) cout << ", ";
+    }
+    cout << ")";
+    
+    // Dependiendo de los requisitos, podría devolver un valor ImpValue aquí
+    return ImpValue();  // Retornar un valor adecuado (por ejemplo, de tipo ImpValue)
 }
 
-ImpValue ImpCODE::visit(FCallExp* e) {
-   if (env.check(e->name))
-        cout << "LODc " << e->name <<endl;
-    return env.lookup(e->name);
-}
+
+
+

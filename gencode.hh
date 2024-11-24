@@ -14,6 +14,7 @@ private:
   Environment<ImpValue> env;
 
 public:
+
   int etiquetas=0;
   void interpret(Program*);
   void visit(Program*);
@@ -26,12 +27,20 @@ public:
   void visit(IfStatement*);
   void visit(WhileStatement*);
   void visit(ForStatement* e);
+  //void visit(FCallStatement* e);
+ void visit(ReturnStatement* e);
+ // ImpValue visit(UnaryExp* e);
   ImpValue visit(BinaryExp* e);
- // ImpValue visit (UnaryExp* e);
+  //ImpValue visit (UnaryExp* e);
   ImpValue visit(BoolExp* e);
   ImpValue visit(NumberExp* e);
   ImpValue visit(IdentifierExp* e);
   ImpValue visit(IFExp* e);
+  ImpValue visit(FCallExp* e);
+ void visit(FCallStatement* e);
+ void visit (FunDec* e);
+ void visit (FunDecList* e);
+
 };
 
 

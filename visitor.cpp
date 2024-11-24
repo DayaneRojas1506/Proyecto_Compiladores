@@ -18,6 +18,17 @@ int UnaryExp::accept(Visitor* visitor){
     return visitor->visit(this);
 }
 
+ImpValue UnaryExp::accept(ImpValueVisitor *v)
+{
+    return ImpValue();
+}
+
+ImpValue FCallExp::accept(ImpValueVisitor *e)
+{
+    return ImpValue();
+}
+
+
 int IFExp::accept(Visitor* visitor) {
     return visitor->visit(this);
 }
@@ -102,7 +113,8 @@ int ReturnStatement::accept(Visitor* visitor) {
 
 
 int FCallExp::accept(Visitor* visitor) {
-    return visitor->visit(this);
+    visitor->visit(this);
+    return 0;
 }
 
 int FCallStatement::accept(Visitor *visitor) {

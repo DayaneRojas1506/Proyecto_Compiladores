@@ -123,6 +123,12 @@ void ImpInterpreter::visit(ForStatement* s) {
     return;
 }
 
+/*
+ImpValue ImpInterpreter::visit(UnaryExp *e)
+{
+    return ImpValue();
+}*/
+
 ImpValue ImpInterpreter::visit(BinaryExp* e) {
     ImpValue result;
     ImpValue v1 = e->left->accept(this);
@@ -214,3 +220,7 @@ ImpValue ImpInterpreter::visit(IFExp* e) {
     }
 }
 
+ImpValue ImpInterpreter::visit(FCallExp *e)
+{
+    return ImpValue();
+}
